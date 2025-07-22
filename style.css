@@ -1,0 +1,95 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #c2e9fb, #a1c4fd);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+/* Vùng khung chính */
+.content {
+  width: 95%;
+  max-width: 800px;
+  padding: 30px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Vùng chọn vị trí */
+.select_location {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+/* Style select box */
+.select-opt select {
+  width: 220px;
+  height: 40px;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: #333;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.select-opt select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 0 3px #4fc3f7;
+}
+
+/* Nút Tra cứu */
+.ask button {
+  height: 42px;
+  padding: 0 24px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #29b6f6, #0288d1);
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.3s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+}
+
+.ask button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #0288d1, #01579b);
+}
+
+/* Vùng hiển thị kết quả */
+.response_mess {
+  min-height: 200px;
+  background: rgba(255, 255, 255, 0.6);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease-in-out;
+}
+
+.mess p {
+  font-size: 17px;
+  color: #263238;
+  line-height: 1.6;
+}

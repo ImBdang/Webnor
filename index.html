@@ -3,18 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiêu đề trang</title>
+    <title>About Viet Nam</title>
     <link rel="stylesheet" href="style.css"> 
 </head>
 <body>
-    <h1>Tiêu đề chính</h1>
-    <p>Đây là một đoạn văn bản.</p>
+    <div class="content">
+        <div class="select_location">
+            <div class="provinces select-opt">
+                <select id="provinces" name="provinces">
+                    <option value="0">Không xác định</option>
+                </select>
+            </div>
+            
+            <div class="districts select-opt">
+                <select id="districts" name="districts">
+                    <option value="0">Không xác định</option>
+                </select>
+            </div>
 
-    <ul>
-        <li>Mục 1</li>
-        <li>Mục 2</li>
-    </ul>
+            <div class="ask">
+                <button onclick="tracuu()">Tra cứu</button>
+            </div>
+        </div>
 
+        <div class="response_mess">
+            <div class="mess" id="message">
+                <p>Kết quả tra cứu</p>
+            </div>
+        </div>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

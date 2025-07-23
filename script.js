@@ -2,7 +2,6 @@ const provinces_api = "https://cmn5rowwiwusexidep6c62c5mu0dsjbt.lambda-url.ap-so
 const gemini_api = "https://3wsknos7fhh6w55o5vkqoruogy0brnvr.lambda-url.ap-southeast-2.on.aws/"
 
 async function get_provinces(code){
-
     const params = new URLSearchParams({
         province_code: code
     });

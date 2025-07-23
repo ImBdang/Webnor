@@ -1,70 +1,72 @@
-const main_api = "https://provinces.open-api.vn/api/?depth=2"
-const gemini_api = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent"
-const gemini_key = "AIzaSyAg1B86urF-veuOfJRFOOigza0niXOvYxA"
-data_tinhthanh = null
-async function get_provinces(){
-    data = await fetch(main_api, {method: "GET"}).then(res => res.json())
-    .catch(e =>{
+const provinces_api = "https://cmn5rowwiwusexidep6c62c5mu0dsjbt.lambda-url.ap-southeast-2.on.aws/"
+const gemini_api = "https://3wsknos7fhh6w55o5vkqoruogy0brnvr.lambda-url.ap-southeast-2.on.aws/"
+
+async function get_provinces(code){
+
+    const params = new URLSearchParams({
+        province_code: code
+    });
+
+    const url = `${provinces_api}?${params.toString()}`
+    data = await fetch(url, {method: "GET"}).then(res => res.json())
+    .catch(e => {
         console.log(e)
     })
     return data
+}
+
+async function gen_ans(cauhoi){
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "cauhoi": cauhoi
+    }
+    cautraloi = await fetch(gemini_api, {method: "POST", headers: headers, body: JSON.stringify(data)}).then(res => res.json())
+    .catch(e =>{
+        console.log(e)
+    })
+
+    return cautraloi["cautraloi"]
 }
 
 function gen_string(data){
     if (data == null)
         return
     s = `<option value="-1">Không xác định</option>\n`
-    let i = 0
     data.forEach(element => {
-        s += `<option value="${i}">${element.name}</option>\n`
-        i++
+        s += `<option value="${element.code}">${element.name}</option>\n`
     });
     return s
 }
 
-async function gen_ans(question){
-    const header = {
-        'Content-Type': 'application/json',
-        'X-goog-api-key': gemini_key
+async function handleChange(districts_dom, province_code) {
+    if (province_code != "-1") {
+        let districts_data = await get_provinces(province_code);
+        let districts_string = gen_string(districts_data["data"]);
+        districts_dom.innerHTML = districts_string;
     }
-    let data = {
-        contents: [{
-            parts: [
-                {text: question}
-            ]}
-        ]
-    }
-    cautraloi = await fetch (gemini_api, {
-        method: "POST", headers: header, body: JSON.stringify(data)
-    })
-    .then(res => res.json())
-    .catch(e =>{
-        console.log(e)
-    })
-    cautraloi = cautraloi["candidates"][0]["content"]["parts"][0]["text"]
-    return cautraloi
 }
 
 async function tracuu(){
     message_dom = document.getElementById("message")
-    if (data_tinhthanh == null){
-        message_dom.innerHTML = "<p>Dữ liệu chưa sẵn sàng</p>"
-        return 
-    }
-    province_code = document.getElementById("provinces").value
-    districts_code = document.getElementById("districts").value
+    provinces_dom = document.getElementById("provinces")
+    districts_dom = document.getElementById("districts")
 
+    province_code = provinces_dom.value
+    district_code = districts_dom.value
 
-    if (province_code == -1){
+    if (province_code == "-1"){
         message_dom.innerHTML = "<p>Vui lòng chọn tỉnh thành</p>"
         return 
     }
-    tinhthanh = data_tinhthanh[province_code].name
-    if (districts_code == -1)
+    tinhthanh = provinces_dom.options[provinces_dom.selectedIndex].text
+    if (district_code == "-1")
         quanhuyen = ""
     else
-        quanhuyen = data_tinhthanh[province_code].districts[districts_code].name
-    console.log(tinhthanh + " " + quanhuyen)
+        quanhuyen = districts_dom.options[districts_dom.selectedIndex].text
+
     template = `Giới thiệu về bản sắc nét đẹp về  ${tinhthanh} ${quanhuyen} trong 180 từ`
     message_dom.innerHTML = "<p>Đang tra cứu...</p>"
     cautraloi = await gen_ans(template)
@@ -74,15 +76,14 @@ async function tracuu(){
 async function main(){
     provinces_dom = document.getElementById("provinces")
     districts_dom = document.getElementById("districts")
-    data_tinhthanh = await get_provinces()
+    data_tinhthanh = await get_provinces("00")
+    data_tinhthanh = data_tinhthanh["data"]
     provinces_string = gen_string(data_tinhthanh)
     provinces_dom.innerHTML = provinces_string
 
     provinces_dom.addEventListener("change", e =>{
         province_code = provinces_dom.value
-        districts_data = data_tinhthanh[province_code]["districts"]
-        districts_string = gen_string(districts_data)
-        districts_dom.innerHTML = districts_string
+        handleChange(districts_dom, province_code)
     })
 }
 
